@@ -1,6 +1,6 @@
 NAME		= inception
 
-COMPOSE		= docker-compose --project-directory=srcs -p $(NAME)
+COMPOSE		= docker-compose -f srcs/docker-compose.yml -p $(NAME)
 
 all:		up
 
