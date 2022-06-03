@@ -18,15 +18,20 @@ RUN apt-get -y install mariadb-server
 COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 
 # Copy SQL database creation script
-COPY conf/db.sql /
+# COPY conf/db.sql /
 
 # Replace database name (DB_DATABASE), database user (DB_USER) and database password (DB_PASSWORD) in SQL script
-RUN sed -i "s/DB_DATABASE/$DB_DATABASE/g" /db.sql
-RUN sed -i "s/DB_USER/$DB_USER/g" /db.sql
-RUN sed -i "s/DB_PASSWORD/$DB_PASSWORD/g" /db.sql
+# RUN sed -i "s/DB_DATABASE/$DB_DATABASE/g" /db.sql
+# RUN sed -i "s/DB_USER/$DB_USER/g" /db.sql
+# RUN sed -i "s/DB_PASSWORD/$DB_PASSWORD/g" /db.sql
 
 # Run MYSQL and inject SQL script
-RUN service mysql start && mysql < db.sql
+# RUN service mysql start && cat db.sql > mysql < db.sql
+RUN		service mysql start \
+&&		mysql -e "create database if not exists $MYSQL_DATABASE;\
+alter user 'root'@'localhost' identified by '$MYSQL_ROOT_PASSWORD';\
+grant all privileges on $MYSQL_DATABASE.* to '$MYSQL_USER'@'%' identified by '$MYSQL_PASSWORD';\
+flush privileges;"
 
 RUN rm -f db.sql
 

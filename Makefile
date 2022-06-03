@@ -31,10 +31,10 @@ stop:
 			$(COMPOSE) stop
 
 clean:
-			docker-compose --project-directory=srcs down --rmi all
+			docker-compose -f srcs/docker-compose.yml down --rmi all
 
 fclean:
-			docker-compose --project-directory=srcs down --rmi all --volumes
+			docker-compose -f srcs/docker-compose.yml down --rmi all --volumes
 			sudo rm -rf /home/$(USER)/data/*
 
 volumes:
