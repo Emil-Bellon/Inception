@@ -26,9 +26,8 @@ COPY ./conf/50-server.cnf /etc/mysql/mariadb.conf.d/
 # RUN sed -i "s/DB_PASSWORD/$DB_PASSWORD/g" /db.sql
 
 # Run MYSQL and inject SQL script
-# RUN service mysql start && cat db.sql > mysql < db.sql
-RUN		service mysql start \
-&&		mysql -e "create database if not exists $DB_DATABASE;\
+# RUN service mysql start && mysql < db.sql
+RUN		service mysql start && mysql -e "create database if not exists $DB_DATABASE;\
 alter user 'root'@'localhost' identified by '$DB_ROOT_PASSWORD';\
 grant all privileges on $DB_DATABASE.* to '$DB_USER'@'%' identified by '$DB_PASSWORD';\
 flush privileges;"
