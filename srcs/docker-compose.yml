@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-    mariadb:
+  mariadb:
     container_name: mariadb
     image: mariadb
     build:
@@ -17,7 +17,7 @@ services:
       - inception
     restart: on-failure
 
-   nginx:
+  nginx:
     container_name: nginx
     image: nginx
     build:
@@ -54,7 +54,6 @@ services:
 
 networks:
   inception:
-    name: inception
     driver: bridge
 
 volumes:
