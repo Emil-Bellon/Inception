@@ -70,13 +70,13 @@ volumes:
     name: db_volume
     driver: local
     driver_opts:
-      device: /home/ebellon/data/mariadb
+      device: /home/ebellon/data/db
       o: bind
       type: none
   wp_volume:
     name: wp_volume
     driver: local
     driver_opts:
-      device: /home/ebellon/data/wordpress
+      device: /home/ebellon/data/wp
       o: bind
       type: none
