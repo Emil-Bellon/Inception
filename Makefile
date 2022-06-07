@@ -3,8 +3,8 @@ SRCS	=	srcs/docker-compose.yml
 all:	up
 
 up:
-	mkdir -p /home/ebellon/data/mariadb
-	mkdir -p /home/ebellon/data/wordpress
+	mkdir -p /home/ebellon/data/db
+	mkdir -p /home/ebellon/data/wp
 	docker-compose -f $(SRCS) up --build -d
 down:
 	docker-compose -f $(SRCS) down
