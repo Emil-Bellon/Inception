@@ -1,72 +1,61 @@
-version: '3'
-
 services:
   mariadb:
-    container_name: mariadb
     image: mariadb
+    env_file: .env
     build:
       context: ./requirements/mariadb
       args:
-        - MYSQL_ROOT_PASSWORD
-        - MYSQL_DATABASE
-        - MYSQL_USER
-        - MYSQL_PASSWORD
+        DB_DB: ${DB_DB}
+        DB_USER: ${DB_USER}
+        DB_PASS: ${DB_PASS}
+    container_name: mariadb
+    restart: on-failure
     volumes:
-      - db:/var/lib/mysql
+      - mariadb:/var/lib/mysql
     networks:
       - inception
-    restart: on-failure
 
   nginx:
-    container_name: nginx
     image: nginx
-    build:
-      context: ./requirements/nginx
+    build: ./requirements/nginx
+    container_name: nginx
+    restart: on-failure
     volumes:
-      - site:/var/www/html
+      - wordpress:/var/www/wordpress
     networks:
       - inception
     ports:
       - "443:443"
-    restart: on-failure
     depends_on:
-      - wordpress
+      wordpress:
+        condition: service_started
 
   wordpress:
-    container_name: wordpress
     image: wordpress
-    build:
-      context: ./requirements/wordpress
-      args:
-        - MYSQL_ROOT_PASSWORD
-        - MYSQL_DATABASE
-        - MYSQL_USER
-        - MYSQL_PASSWORD
-    env_file:
-      - .env
+    env_file: .env
+    build: ./requirements/wordpress
+    container_name: wordpress
+    restart: on-failure
     volumes:
-      - site:/var/www/html
+      - wordpress:/var/www/wordpress
     networks:
       - inception
-    restart: on-failure
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_started
 
 networks:
   inception:
     driver: bridge
 
 volumes:
-  db:
-    driver: local
+  mariadb:
     driver_opts:
       type: none
-      device: /home/$USER/data/db
+      device: /home/ebellon/data/mariadb
       o: bind
-
-  site:
-    driver: local
+  wordpress:
     driver_opts:
       type: none
-      device: /home/$USER/data/site
+      device: /home/ebellon/data/wordpress
       o: bind

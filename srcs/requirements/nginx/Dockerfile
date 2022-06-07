@@ -1,19 +1,16 @@
 FROM debian:buster
 
-# Set up port forwarding
-EXPOSE 443
-
 # Install base components
-RUN apt-get update
-RUN apt-get upgrade -y
-RUN apt-get -y install nginx
-RUN apt-get -y install openssl
+RUN apt-get update && apt-get upgrade -y && apt-get -y install nginx openssl
 
 # Create certificate
-RUN openssl req -x509 -nodes -days 365 -subj "/C=FR/ST=France/L=Lyon/O=42/OU=42/CN=ebellon" -newkey rsa:4096 -keyout /etc/ssl/nginx-selfsigned.key -out /etc/ssl/nginx-selfsigned.crt;
+RUN mkdir -p /etc/nginx/ssl \
+	&& openssl req -new -newkey rsa:4096 -days 365 -nodes -x509 \
+	-subj "/C=FR/ST=Rhone/L=Lyon/O=42/CN=ebellon.42.fr/emailAddress=ebellon@student.42lyon.fr" \
+	-keyout /etc/nginx/ssl/ebellon.42.fr.key -out /etc/nginx/ssl/ebellon.42.fr.crt
 
 # Copy nginx config
-COPY ./conf/default etc/nginx/sites-enabled/default
+COPY ./conf/default etc/nginx/sites-available/default
 
 # Run nginx
 CMD ["nginx", "-g", "daemon off;"]

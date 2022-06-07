@@ -1,44 +1,26 @@
-NAME		= inception
+SRCS	=	srcs/docker-compose.yml
 
-COMPOSE		= docker-compose -f srcs/docker-compose.yml -p $(NAME)
+all:	up
 
-all:		up
-
-re:			fclean all
-
-
-up:			build
-			$(COMPOSE) up --detach
-
+up:
+	mkdir /home/ebellon/data/mariadb
+	mkdir /home/ebellon/data/wordpress
+	docker-compose -f $(SRCS) up --build -d
 down:
-			$(COMPOSE) down
-
-build:		volumes
-			$(COMPOSE) build --parallel
-
-create:		build
-			$(COMPOSE) create
+	docker-compose -f $(SRCS) down
 
 ps:
-			$(COMPOSE) ps --all
+	docker-compose -f $(SRCS) ps
 
-start:
-			$(COMPOSE) start
-
-restart:
-			$(COMPOSE) restart
-stop:
-			$(COMPOSE) stop
-
+top:
+	docker-compose -f $(SRCS) top
 clean:
-			docker-compose -f srcs/docker-compose.yml down --rmi all
-
+	docker-compose -f $(SRCS) down --rmi all -v
 fclean:
-			docker-compose -f srcs/docker-compose.yml down --rmi all --volumes
-			sudo rm -rf /home/$(USER)/data/*
+	docker-compose -f $(SRCS) down --rmi all -v
+	rm -rf /home/ebellon/data/
 
-volumes:
-			@mkdir -p /home/$(USER)/data/site
-			@mkdir -p /home/$(USER)/data/db
-								  
-.PHONY:		all re up down build create ps start restart stop clean fclean
+prune:	fclean
+	docker system prune -f --all --volumes
+
+.PHONY:	all up down ps top clean fclean prune
