@@ -5,7 +5,8 @@ all:	up
 up:
 	mkdir -p /home/ebellon/data/db
 	mkdir -p /home/ebellon/data/wp
-	docker-compose -f $(SRCS) up --build -d
+	docker-compose -f $(SRCS) build --parralel
+	docker-compose -f $(SRCS) up -d
 down:
 	docker-compose -f $(SRCS) down
 
