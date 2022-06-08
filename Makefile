@@ -15,7 +15,7 @@ ps:
 top:
 	docker-compose -f $(SRCS) top
 clean:
-	docker-compose -f $(SRCS) down --rmi all -v
+	docker-compose -f $(SRCS) down --rmi all
 fclean:
 	docker-compose -f $(SRCS) down --rmi all -v
 	rm -rf /home/ebellon/data/

@@ -1,3 +1,11 @@
-ssh ebellon.42.fr@127.0.0.1 -p 4242
+ssh ebellon@127.0.0.1 -p 4242
 
 use "su" on ssh;
+
+ebellon.42.fr/wp-admin
+
+docker exec -it container_name bash
+mysql
+mysql -uUserName -pPassWord
+SHOW DATABASES;
+SHOW TABLES;
